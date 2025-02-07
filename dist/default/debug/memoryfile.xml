@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <executable name="dist/default/debug/ln_x-1_.X.debug.elf">
+    <memory name="data">
+      <units>bytes</units>
+      <length>2048</length>
+      <used>40</used>
+      <free>2008</free>
+    </memory>
+    <memory name="program">
+      <units>bytes</units>
+      <length>48765</length>
+      <used>273</used>
+      <free>48492</free>
+    </memory>
+  </executable>
+</project>
