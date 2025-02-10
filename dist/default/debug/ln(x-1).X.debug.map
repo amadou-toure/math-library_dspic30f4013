@@ -68,19 +68,19 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x100                0x82            0xc3  (195)
-.text                        0x182                0x2c            0x42  (66)
-.dinit                       0x1ae                 0x8             0xc  (12)
+.text                        0x182                0x8e            0xd5  (213)
+.dinit                       0x210                 0x8             0xc  (12)
 
-                 Total "program" memory used (bytes):          0x111  (273) <1%
+                 Total "program" memory used (bytes):          0x1a4  (420) <1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x800]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-.bss                         0x800                   0            0x28  (40)
+.bss                         0x800                   0            0x2c  (44)
 
-                 Total "data" memory used (bytes):           0x28  (40) 1%
+                 Total "data" memory used (bytes):           0x2c  (44) 2%
 
 
 Dynamic Memory Usage
@@ -88,9 +88,9 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x828                               0x7d8  (2008)
+stack                        0x82c                               0x7d4  (2004)
 
-                 Maximum dynamic memory (bytes):          0x7d8  (2008)
+                 Maximum dynamic memory (bytes):          0x7d4  (2004)
 
 
 External Symbols in Program Memory (by address):
@@ -237,9 +237,9 @@ userdata
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0x14 build/default/debug/source.o
 
-.debug_line       0x000000         0x49
+.debug_line       0x000000         0x76
  *(.debug_line)
- .debug_line      0x000000         0x49 build/default/debug/source.o
+ .debug_line      0x000000         0x76 build/default/debug/source.o
 
 .debug_frame
  *(.debug_frame)
@@ -1098,12 +1098,12 @@ __c30_signature
  __c30_signature
                   0x000020          0x6 /Applications/microchip/xc16/v2.10/bin/bin/../../lib/libc99-pic30-elf.a(data_init_standard.o)
 
-.bss                0x0800         0x28
- .bss               0x0800         0x28 build/default/debug/source.o
+.bss                0x0800         0x2c
+ .bss               0x0800         0x2c build/default/debug/source.o
 
-.text             0x000182         0x2c
- .text            0x000182         0x2c build/default/debug/source.o
+.text             0x000182         0x8e
+ .text            0x000182         0x8e build/default/debug/source.o
                   0x000182                  __reset
 
-.dinit            0x0001ae          0x8
- .dinit           0x0001ae          0x8 data_init
+.dinit            0x000210          0x8
+ .dinit           0x000210          0x8 data_init

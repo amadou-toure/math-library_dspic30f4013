@@ -94,20 +94,14 @@ __reset:
         MOV W0, SPLIM
         NOP  
 init:
-  mov #0,w1
-  mov w1,_x
-  mov w1,ACCA
-  mov #1,w0
-  mov wo,_n
-  mov #5,w0
-  mov w0,_end_ln
-  mov #2,w0
-  mov w0,_y
+call _INIT_LN
   
 
 main:
 	
-	call _ln_1__x
+	;call _ln_1__x
+	call _exposant
+	
 loop:
         BRA  loop            
 
@@ -117,23 +111,37 @@ loop:
 ;Subroutine exposant: returns the result of _x^_n and stores the result in w12
 ;..............................................................................
 _exposant:
-	mov _n,w3
-	dec2 w3,w3
-	mov _x,w1
+	mov _n,w2
+	cp w2,#1
+	bra z,_n_is_1
+	cp0 w2
+	bra z,_n_is_null
+	dec2 w2,w2 
+	mov _x,w1 
 	mov w1,w0
-	do w3,_exit
+	do w2,_exit
 	MUL.SS w0,w1,w12
 	mov w12,w0
+
 _exit: 
     NOP
+    return
+_n_is_1:
+    mov _x,w0
+    nop
+    return
+_n_is_null:
+    mov #1,w0
+    nop
     return
 ;-------------------------------------------------------------------------------
 ;========================================================================================
 ;Subroutine _ln_1__x: returns the result of ln(1+x):
 ;..............................................................................
 _ln_1__x:
-    mov _end_ln,w5
-    do w5,_exit_ln
+    mov _end_ln,w3
+    dec w3,w3
+    do w3,_exit_ln
 ;....................part 1.....................................................
     mov _y,w0
     mov w0,_x
@@ -141,7 +149,7 @@ _ln_1__x:
     call _exposant
     mov w12,_y
 ;....................part 2.....................................................
-    mov #-1,w0
+    mov #1,w0
     mov w0,_x
     mov _n,w1
     inc w1,w1
@@ -150,11 +158,13 @@ _ln_1__x:
 ;....................part 3.....................................................
     mov _x,w0
     mov _n,w1
-    DIV.S w0,w1,w12 
+    DIVF w0,w1 ; result stored in w0
+    mov w0,w12
 ;....................part 4.....................................................
-    mov _y,w3
-    mov w12,w4
-    mac w3*w4,ACCA
+    mov _y,w6
+    mov w12,w5
+    mac w6*w5,A
+    
 ;....................part 5.....................................................
     mov _n,w1	
     inc w1,w1
@@ -163,6 +173,21 @@ _exit_ln:
     NOP
     return
 ;-------------------------------------------------------------------------------
+_INIT_LN:
+  BCLR CORCON,#IF
+  BSET CORCON,#SATA
+  BSET CORCON,#ACCSAT
+  
+  mov #9,w1
+  mov w1,_x
+  mov #6,w0
+  mov w0,_n
+  mov #3,w0
+  mov w0,_end_ln
+  mov #2,w0
+  mov w0,_y
+  clr A
+  return
 
 ;--------End of All Code Sections ---------------------------------------------
 
