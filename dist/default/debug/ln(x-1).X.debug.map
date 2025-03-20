@@ -68,10 +68,10 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x100                0x82            0xc3  (195)
-.text                        0x182                0x8e            0xd5  (213)
-.dinit                       0x210                 0x8             0xc  (12)
+.text                        0x182                0xb0           0x108  (264)
+.dinit                       0x232                 0x8             0xc  (12)
 
-                 Total "program" memory used (bytes):          0x1a4  (420) <1%
+                 Total "program" memory used (bytes):          0x1d7  (471) <1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x800]
@@ -237,9 +237,9 @@ userdata
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0x14 build/default/debug/source.o
 
-.debug_line       0x000000         0x76
+.debug_line       0x000000         0x86
  *(.debug_line)
- .debug_line      0x000000         0x76 build/default/debug/source.o
+ .debug_line      0x000000         0x86 build/default/debug/source.o
 
 .debug_frame
  *(.debug_frame)
@@ -1101,9 +1101,9 @@ __c30_signature
 .bss                0x0800         0x2c
  .bss               0x0800         0x2c build/default/debug/source.o
 
-.text             0x000182         0x8e
- .text            0x000182         0x8e build/default/debug/source.o
+.text             0x000182         0xb0
+ .text            0x000182         0xb0 build/default/debug/source.o
                   0x000182                  __reset
 
-.dinit            0x000210          0x8
- .dinit           0x000210          0x8 data_init
+.dinit            0x000232          0x8
+ .dinit           0x000232          0x8 data_init

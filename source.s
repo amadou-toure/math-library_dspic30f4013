@@ -19,13 +19,13 @@
 ;               Compiler : 1.10                                               *
 ;               Assembler: 1.10                                               *
 ;               Linker   : 1.10                                               *
-;                                                                  	          *
+;                                                                  	        
 ;******************************************************************************
 ;																			  *
 ;******************************************************************************
-; Description:                                                        		  *
-;   Cr»tion d'un sinus ? l'aide d'une table de donn»es en m»moire programme	  *
-;	avec le DCI et le Codec SI3021											  *
+; Description:                                                        		 
+;   CrÈation d'un sinus ? l'aide d'une table de donnÈes en mÈmoire programme  *
+;	avec le DCI et le Codec SI3021						
 ;                                                                             *
 ;******************************************************************************
 
@@ -74,8 +74,8 @@
 Reserved: 	.space 0x24	; Espaces reserv»s 
  _x: .space 2;
  _n: .space 2;
- _end_ln: .space 2;
- _y: .space 2;
+ _N: .space 2;
+ _number: .space 2;
 
 
 ;------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ Reserved: 	.space 0x24	; Espaces reserv»s
 
 	.equ	Fcy, #7372800
 
-;===========================================================================================
+;===============================================================================
 ;Code Section in Program Memory
 ;..............................................................................
 
@@ -97,27 +97,45 @@ init:
 call _INIT_LN
   
 
-main:
+main: 
 	
-	;call _ln_1__x
-	call _exposant
+	call _ln_1_PLUS_x
+	;sftac A,#-15
+	;call _exposant
+	;call _test
+	;call _div_test
 	
 loop:
         BRA  loop            
 
 
-;========================================================================================
-;========================================================================================
+;===============================================================================
+;===============================================================================
 ;Subroutine exposant: returns the result of _x^_n and stores the result in w12
-;..............................................................................
-_exposant:
+;...............................................................................
+_div_test:
+    mov #2,w6
+    mov #-1,w2
+    repeat #17
+    divf w2,w6
+    mov w0,w5
+    do #7,_end_div_test
+    mac w5*w6,A
+    inc w6,w6
+    
+ _end_div_test:
+    nop
+    sftac A,#-15
+    return
+    
+_exposant:;add the value in _number and the exposant in _n, the result is in w12 and w0
 	mov _n,w2
 	cp w2,#1
 	bra z,_n_is_1
 	cp0 w2
 	bra z,_n_is_null
 	dec2 w2,w2 
-	mov _x,w1 
+	mov _number ,w1 
 	mov w1,w0
 	do w2,_exit
 	MUL.SS w0,w1,w12
@@ -127,50 +145,49 @@ _exit:
     NOP
     return
 _n_is_1:
-    mov _x,w0
+    mov _x,w12
+    mov w12,w0
     nop
     return
 _n_is_null:
-    mov #1,w0
+    mov #1,w12
+    mov w12,w0
     nop
     return
 ;-------------------------------------------------------------------------------
-;========================================================================================
-;Subroutine _ln_1__x: returns the result of ln(1+x):
+;===============================================================================
+;Subroutine _ln_1_PLUS_x: returns the result of ln(1+x):
 ;..............................................................................
-_ln_1__x:
-    mov _end_ln,w3
+_ln_1_PLUS_x:
+    
+    mov #-1,w2
+    mov _N,w3
     dec w3,w3
     do w3,_exit_ln
-;....................part 1.....................................................
-    mov _y,w0
-    mov w0,_x
-    mov _n,w0
-    call _exposant
-    mov w12,_y
-;....................part 2.....................................................
-    mov #1,w0
-    mov w0,_x
-    mov _n,w1
-    inc w1,w1
-    call _exposant
-    mov w12,_x
-;....................part 3.....................................................
+;--------------------------part_1:(-1/_n)---------------------------------------
+    mov _n,w4
+    mov #-1,w2
+    repeat #17
+    DIVf w2,w4
+    mov w0,w5 ;initializing w5 for MAC in part 3
+;--------------------------part_2:(_x^_n)---------------------------------------
     mov _x,w0
-    mov _n,w1
-    DIVF w0,w1 ; result stored in w0
-    mov w0,w12
-;....................part 4.....................................................
-    mov _y,w6
-    mov w12,w5
-    mac w6*w5,A
-    
-;....................part 5.....................................................
-    mov _n,w1	
-    inc w1,w1
-    mov w1,_n
+    mov w0,_number
+    call _exposant ;result in w12 or w0
+    mov w12,w6 ;initializing w6 for MAC in part 3
+;--------------------------part_3:(mac)-----------------------------------------
+    mac w5*w6,A
+    mov _n,w4
+    inc w4,w4
+    mov w4,_n
+;--------------------------part_4:(reset)---------------------------------------
 _exit_ln:
     NOP
+   sftac A,#-15
+    return
+;-------------------------------------------------------------------------------
+_test:
+    
     return
 ;-------------------------------------------------------------------------------
 _INIT_LN:
@@ -178,15 +195,17 @@ _INIT_LN:
   BSET CORCON,#SATA
   BSET CORCON,#ACCSAT
   
-  mov #9,w1
-  mov w1,_x
-  mov #6,w0
-  mov w0,_n
-  mov #3,w0
-  mov w0,_end_ln
-  mov #2,w0
-  mov w0,_y
   clr A
+  
+  mov #1,w0
+  mov w0,_n
+  
+  mov #2,w0
+  mov w0,_x
+  
+  mov #3,w0
+  mov w0,_N
+  
   return
 
 ;--------End of All Code Sections ---------------------------------------------
